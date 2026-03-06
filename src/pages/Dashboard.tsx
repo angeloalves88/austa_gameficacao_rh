@@ -35,7 +35,7 @@ export function Dashboard() {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 lg:mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6 lg:mb-8">
         <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-6 shadow-sm">
           <p className="text-slate-600 text-xs sm:text-sm mb-1">Bonificação estimada ao final do contrato</p>
           <p className="text-xl sm:text-2xl font-bold text-green-600 flex items-center gap-2">
