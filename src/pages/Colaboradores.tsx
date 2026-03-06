@@ -1,0 +1,151 @@
+import { useState, useMemo } from 'react';
+import { AreaChart, Area, ResponsiveContainer } from 'recharts';
+import { Search } from 'lucide-react';
+import {
+  colaboradoresData,
+  departamentos,
+  type StatusUsoPA,
+} from '../data/mockData';
+
+type Colaborador = (typeof colaboradoresData)[0];
+
+function ScoreBadge({ score }: { score: number }) {
+  const variant = score >= 80 ? 'green' : score >= 50 ? 'yellow' : 'red';
+  const colors = { green: 'bg-green-100 text-green-800', yellow: 'bg-amber-100 text-amber-800', red: 'bg-red-100 text-red-800' };
+  return (
+    <span className={`px-2 py-0.5 rounded text-sm font-medium ${colors[variant]}`}>
+      {score}
+    </span>
+  );
+}
+
+function StatusUsoPABadge({ status }: { status: StatusUsoPA }) {
+  const labels = { NaoUsou: 'Não usou PA', TelemedicinaComPA: 'Telemedicina → PA', TelemedicinaSemPA: 'Telemedicina sem PA', PADireto: 'PA direto' };
+  const variants: Record<StatusUsoPA, string> = {
+    NaoUsou: 'text-green-600',
+    TelemedicinaComPA: 'text-blue-600',
+    TelemedicinaSemPA: 'text-amber-600',
+    PADireto: 'px-2 py-0.5 rounded text-sm font-medium bg-red-100 text-red-800',
+  };
+  return <span className={variants[status]}>{labels[status]}</span>;
+}
+
+function Sparkline({ data }: { data: number[] }) {
+  const chartData = data.map((v, i) => ({ value: v, index: i }));
+  return (
+    <div className="w-20 h-8">
+      <ResponsiveContainer width="100%" height="100%">
+        <AreaChart data={chartData}>
+          <Area type="monotone" dataKey="value" stroke="#3b82f6" fill="#93c5fd" strokeWidth={1} />
+        </AreaChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
+export function Colaboradores() {
+  const [search, setSearch] = useState('');
+  const [departamento, setDepartamento] = useState('Todos');
+  const [selected, setSelected] = useState<Colaborador | null>(null);
+
+  const filtered = useMemo(() => {
+    return colaboradoresData.filter((c) => {
+      const matchSearch = c.nome.toLowerCase().includes(search.toLowerCase());
+      const matchDept = departamento === 'Todos' || c.departamento === departamento;
+      return matchSearch && matchDept;
+    });
+  }, [search, departamento]);
+
+  return (
+    <div className="p-8 w-full">
+      <h1 className="text-2xl font-bold text-slate-800 mb-6">Colaboradores</h1>
+
+      <div className="flex gap-4 mb-6">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+          <input
+            type="text"
+            placeholder="Buscar..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+        <select
+          value={departamento}
+          onChange={(e) => setDepartamento(e.target.value)}
+          className="px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+        >
+          {departamentos.map((d) => (
+            <option key={d} value={d}>{d}</option>
+          ))}
+        </select>
+      </div>
+
+      <div className="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <table className="w-full">
+          <thead className="bg-slate-50 border-b border-slate-200">
+            <tr>
+              <th className="text-left py-3 px-4 font-medium text-slate-700">Nome</th>
+              <th className="text-left py-3 px-4 font-medium text-slate-700">Departamento</th>
+              <th className="text-left py-3 px-4 font-medium text-slate-700">Score Atual</th>
+              <th className="text-left py-3 px-4 font-medium text-slate-700">Último Uso PA</th>
+              <th className="text-left py-3 px-4 font-medium text-slate-700">Status de Uso</th>
+              <th className="text-left py-3 px-4 font-medium text-slate-700">Tendência</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filtered.map((c) => (
+              <tr
+                key={c.id}
+                onClick={() => setSelected(c)}
+                className="border-b border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors"
+              >
+                <td className="py-3 px-4">{c.nome}</td>
+                <td className="py-3 px-4">{c.departamento}</td>
+                <td className="py-3 px-4"><ScoreBadge score={c.score} /></td>
+                <td className="py-3 px-4">{c.ultimoUsoPA}</td>
+                <td className="py-3 px-4"><StatusUsoPABadge status={c.statusUsoPA} /></td>
+                <td className="py-3 px-4"><Sparkline data={c.tendencia} /></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {selected && (
+        <div className="fixed inset-y-0 right-0 w-96 bg-white border-l border-slate-200 shadow-xl z-40 p-6 overflow-auto">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-semibold text-slate-800">Detalhe do colaborador</h2>
+            <button
+              onClick={() => setSelected(null)}
+              className="text-slate-500 hover:text-slate-700 text-2xl"
+            >
+              ×
+            </button>
+          </div>
+          <p className="font-medium text-slate-800">{selected.nome}</p>
+          <p className="text-slate-600 text-sm">{selected.departamento}</p>
+          <div className="mt-4">
+            <p className="text-sm font-medium text-slate-700">Histórico de Score (últimos 3 meses)</p>
+            <div className="h-24 mt-2">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={selected.tendencia.map((v, i) => ({ value: v, mes: i + 1 }))}>
+                  <Area type="monotone" dataKey="value" stroke="#3b82f6" fill="#93c5fd" />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+          <div className="mt-4">
+            <p className="text-sm font-medium text-slate-700">Últimos 3 eventos</p>
+            <ul className="mt-2 space-y-2 text-sm text-slate-600">
+              <li>• Teleconsulta — 10/02</li>
+              <li>• Telemedicina → PA — 15/02</li>
+              <li>• Uso PA direto — 28/01</li>
+            </ul>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
