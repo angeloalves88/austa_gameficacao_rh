@@ -1,11 +1,28 @@
+import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
+import { Menu } from 'lucide-react';
 import { Sidebar } from './Sidebar';
 
 export function Layout() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <div className="flex min-h-screen w-full">
-      <Sidebar />
-      <main className="flex-1 bg-white min-h-screen overflow-auto">
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+      <main className="flex-1 bg-white min-h-screen overflow-auto min-w-0">
+        {/* Header mobile com hamburger */}
+        <header className="lg:hidden sticky top-0 z-30 bg-white border-b border-slate-200 px-4 py-3 flex items-center gap-3">
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="p-2 -ml-2 text-slate-600 hover:bg-slate-100 rounded-lg"
+            aria-label="Abrir menu"
+          >
+            <Menu size={24} />
+          </button>
+          <span className="font-semibold text-slate-800">Saúde Premiada</span>
+        </header>
+
         <Outlet />
       </main>
     </div>

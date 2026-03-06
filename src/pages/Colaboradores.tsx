@@ -33,7 +33,7 @@ function StatusUsoPABadge({ status }: { status: StatusUsoPA }) {
 function Sparkline({ data }: { data: number[] }) {
   const chartData = data.map((v, i) => ({ value: v, index: i }));
   return (
-    <div className="w-20 h-8">
+    <div className="w-16 sm:w-20 h-6 sm:h-8 shrink-0">
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart data={chartData}>
           <Area type="monotone" dataKey="value" stroke="#3b82f6" fill="#93c5fd" strokeWidth={1} />
@@ -57,24 +57,24 @@ export function Colaboradores() {
   }, [search, departamento]);
 
   return (
-    <div className="p-8 w-full">
-      <h1 className="text-2xl font-bold text-slate-800 mb-6">Colaboradores</h1>
+    <div className="p-4 sm:p-6 lg:p-8 w-full max-w-[1600px] mx-auto">
+      <h1 className="text-xl sm:text-2xl font-bold text-slate-800 mb-4 sm:mb-6">Colaboradores</h1>
 
-      <div className="flex gap-4 mb-6">
-        <div className="relative flex-1">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4 sm:mb-6">
+        <div className="relative flex-1 min-w-0">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
           <input
             type="text"
             placeholder="Buscar..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full pl-10 pr-4 py-2 text-base border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
         <select
           value={departamento}
           onChange={(e) => setDepartamento(e.target.value)}
-          className="px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          className="px-4 py-2 text-base border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 sm:w-auto w-full"
         >
           {departamentos.map((d) => (
             <option key={d} value={d}>{d}</option>
@@ -82,16 +82,17 @@ export function Colaboradores() {
         </select>
       </div>
 
-      <div className="border border-slate-200 rounded-xl overflow-hidden bg-white">
-        <table className="w-full">
+      {/* Tabela com scroll horizontal em mobile */}
+      <div className="border border-slate-200 rounded-xl overflow-x-auto bg-white -mx-4 sm:mx-0">
+        <table className="w-full min-w-[600px]">
           <thead className="bg-slate-50 border-b border-slate-200">
             <tr>
-              <th className="text-left py-3 px-4 font-medium text-slate-700">Nome</th>
-              <th className="text-left py-3 px-4 font-medium text-slate-700">Departamento</th>
-              <th className="text-left py-3 px-4 font-medium text-slate-700">Score Atual</th>
-              <th className="text-left py-3 px-4 font-medium text-slate-700">Último Uso PA</th>
-              <th className="text-left py-3 px-4 font-medium text-slate-700">Status de Uso</th>
-              <th className="text-left py-3 px-4 font-medium text-slate-700">Tendência</th>
+              <th className="text-left py-3 px-3 sm:px-4 font-medium text-slate-700 text-sm">Nome</th>
+              <th className="text-left py-3 px-3 sm:px-4 font-medium text-slate-700 text-sm">Depto</th>
+              <th className="text-left py-3 px-3 sm:px-4 font-medium text-slate-700 text-sm">Score</th>
+              <th className="text-left py-3 px-3 sm:px-4 font-medium text-slate-700 text-sm hidden md:table-cell">Último PA</th>
+              <th className="text-left py-3 px-3 sm:px-4 font-medium text-slate-700 text-sm">Status</th>
+              <th className="text-left py-3 px-3 sm:px-4 font-medium text-slate-700 text-sm hidden sm:table-cell">Tendência</th>
             </tr>
           </thead>
           <tbody>
@@ -99,14 +100,14 @@ export function Colaboradores() {
               <tr
                 key={c.id}
                 onClick={() => setSelected(c)}
-                className="border-b border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors"
+                className="border-b border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors active:bg-slate-100"
               >
-                <td className="py-3 px-4">{c.nome}</td>
-                <td className="py-3 px-4">{c.departamento}</td>
-                <td className="py-3 px-4"><ScoreBadge score={c.score} /></td>
-                <td className="py-3 px-4">{c.ultimoUsoPA}</td>
-                <td className="py-3 px-4"><StatusUsoPABadge status={c.statusUsoPA} /></td>
-                <td className="py-3 px-4"><Sparkline data={c.tendencia} /></td>
+                <td className="py-3 px-3 sm:px-4 text-sm">{c.nome}</td>
+                <td className="py-3 px-3 sm:px-4 text-sm">{c.departamento}</td>
+                <td className="py-3 px-3 sm:px-4"><ScoreBadge score={c.score} /></td>
+                <td className="py-3 px-3 sm:px-4 text-sm hidden md:table-cell">{c.ultimoUsoPA}</td>
+                <td className="py-3 px-3 sm:px-4"><StatusUsoPABadge status={c.statusUsoPA} /></td>
+                <td className="py-3 px-3 sm:px-4 hidden sm:table-cell"><Sparkline data={c.tendencia} /></td>
               </tr>
             ))}
           </tbody>
@@ -114,12 +115,13 @@ export function Colaboradores() {
       </div>
 
       {selected && (
-        <div className="fixed inset-y-0 right-0 w-96 bg-white border-l border-slate-200 shadow-xl z-40 p-6 overflow-auto">
+        <div className="fixed inset-0 sm:inset-y-0 sm:right-0 sm:left-auto w-full sm:w-96 bg-white border-l border-slate-200 shadow-xl z-40 p-4 sm:p-6 overflow-auto">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold text-slate-800">Detalhe do colaborador</h2>
+            <h2 className="text-base sm:text-lg font-semibold text-slate-800">Detalhe do colaborador</h2>
             <button
               onClick={() => setSelected(null)}
-              className="text-slate-500 hover:text-slate-700 text-2xl"
+              className="p-2 -m-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg text-2xl touch-manipulation"
+              aria-label="Fechar"
             >
               ×
             </button>

@@ -33,46 +33,48 @@ function getEventStyle(event: { status?: string }) {
 
 export function Agendamentos() {
   return (
-    <div className="p-8 w-full">
-      <h1 className="text-2xl font-bold text-slate-800 mb-6">Agendamentos</h1>
+    <div className="p-4 sm:p-6 lg:p-8 w-full max-w-[1600px] mx-auto">
+      <h1 className="text-xl sm:text-2xl font-bold text-slate-800 mb-4 sm:mb-6">Agendamentos</h1>
 
-      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden mb-8">
-        <Calendar
-          localizer={localizer}
-          culture="pt-BR"
-          events={events}
-          startAccessor="start"
-          endAccessor="end"
-          style={{ height: 420 }}
-          eventPropGetter={getEventStyle}
-          messages={{
-            today: 'Hoje',
-            previous: 'Anterior',
-            next: 'Próximo',
-            month: 'Mês',
-            week: 'Semana',
-            day: 'Dia',
-          }}
-        />
+      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden mb-6 lg:mb-8">
+        <div className="h-[320px] sm:h-[380px] md:h-[420px]">
+          <Calendar
+            localizer={localizer}
+            culture="pt-BR"
+            events={events}
+            startAccessor="start"
+            endAccessor="end"
+            style={{ height: '100%' }}
+            eventPropGetter={getEventStyle}
+            messages={{
+              today: 'Hoje',
+              previous: 'Anterior',
+              next: 'Próximo',
+              month: 'Mês',
+              week: 'Semana',
+              day: 'Dia',
+            }}
+          />
+        </div>
       </div>
 
-      <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
-        <h3 className="text-lg font-semibold text-slate-800 mb-4">Agendamentos de hoje (05/03)</h3>
+      <div className="bg-slate-50 rounded-xl p-4 sm:p-6 border border-slate-200">
+        <h3 className="text-base sm:text-lg font-semibold text-slate-800 mb-4">Agendamentos de hoje (05/03)</h3>
         <div className="space-y-2">
           {todayAppointments.map((a) => (
             <div
               key={a.id}
-              className={`flex justify-between items-center p-3 rounded-lg ${
+              className={`flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 p-3 rounded-lg ${
                 a.status === 'No-show' ? 'bg-red-50 border border-red-200' : 'bg-white border border-slate-200'
               }`}
               title={a.status === 'No-show' ? 'Este colaborador perdeu -10 pts' : undefined}
             >
-              <div>
+              <div className="min-w-0">
                 <span className="font-medium text-slate-800">{a.colaborador}</span>
-                <span className="text-slate-600 ml-2">— {a.tipo}</span>
+                <span className="text-slate-600 ml-1 sm:ml-2">— {a.tipo}</span>
               </div>
               <span
-                className={`px-2 py-0.5 rounded text-sm ${
+                className={`px-2 py-0.5 rounded text-sm w-fit shrink-0 ${
                   a.status === 'Confirmado'
                     ? 'bg-green-100 text-green-800'
                     : a.status === 'Pendente'

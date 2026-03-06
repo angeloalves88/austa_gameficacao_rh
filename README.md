@@ -1,4 +1,4 @@
-# Score Saúde Corporativo
+# Saúde Premiada
 
 Portal de gamificação para gestão de saúde corporativa, desenvolvido para gestores de RH.
 

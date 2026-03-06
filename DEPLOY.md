@@ -1,4 +1,4 @@
-# Deploy e troubleshooting - Score Saúde Corporativo
+# Deploy e troubleshooting - Saúde Premiada
 
 ## Diagnóstico do 404
 

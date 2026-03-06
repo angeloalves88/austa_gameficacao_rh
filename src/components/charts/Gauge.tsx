@@ -18,9 +18,9 @@ export function Gauge({ value, max = 100, title, status, meta }: GaugeProps) {
   };
 
   return (
-    <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
-      <h3 className="text-center text-lg font-semibold text-slate-800 mb-4">{title}</h3>
-      <div className="relative mx-auto w-64 h-36">
+    <div className="bg-slate-50 rounded-xl p-4 sm:p-6 border border-slate-200">
+      <h3 className="text-center text-base sm:text-lg font-semibold text-slate-800 mb-3 sm:mb-4">{title}</h3>
+      <div className="relative mx-auto w-48 h-28 sm:w-64 sm:h-36 max-w-full">
         <svg viewBox="0 0 200 110" className="w-full h-full">
           {/* Background arc */}
           <path
@@ -51,10 +51,10 @@ export function Gauge({ value, max = 100, title, status, meta }: GaugeProps) {
         </svg>
       </div>
       <div className="text-center mt-1">
-        <span className="text-3xl font-bold" style={{ color: getZoneColor() }}>{value}</span>
-        <span className="text-slate-500 text-lg">/ {max}</span>
+        <span className="text-2xl sm:text-3xl font-bold" style={{ color: getZoneColor() }}>{value}</span>
+        <span className="text-slate-500 text-base sm:text-lg">/ {max}</span>
       </div>
-      <p className="text-center text-slate-600 mt-1 text-sm">
+      <p className="text-center text-slate-600 mt-1 text-xs sm:text-sm">
         Status: <span style={{ color: getZoneColor(), fontWeight: 600 }}>{status}</span>
         {meta && <> — {meta}</>}
       </p>
