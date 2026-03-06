@@ -5,12 +5,15 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.score-saude.rule=Host(`${APP_DOMAIN}`)"
-      - "traefik.http.routers.score-saude.entrypoints=web"
-      - "traefik.http.routers.score-saude-secure.rule=Host(`${APP_DOMAIN}`)"
-      - "traefik.http.routers.score-saude-secure.entrypoints=websecure"
-      - "traefik.http.routers.score-saude-secure.tls=true"
-      - "traefik.http.services.score-saude.loadbalancer.server.port=80"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.score-saude-rh.rule=Host(`${APP_DOMAIN}`)"
+      - "traefik.http.routers.score-saude-rh.entrypoints=web"
+      - "traefik.http.routers.score-saude-rh.service=score-saude-rh"
+      - "traefik.http.routers.score-saude-rh-secure.rule=Host(`${APP_DOMAIN}`)"
+      - "traefik.http.routers.score-saude-rh-secure.entrypoints=websecure"
+      - "traefik.http.routers.score-saude-rh-secure.service=score-saude-rh"
+      - "traefik.http.routers.score-saude-rh-secure.tls=true"
+      - "traefik.http.services.score-saude-rh.loadbalancer.server.port=80"
     networks:
       - traefik
 
