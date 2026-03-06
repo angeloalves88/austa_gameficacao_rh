@@ -1,11 +1,11 @@
 export const kpiData = {
   economiaEstimada: 12500,
   migracaoTeleconsulta: 35,
-  usoConscientePA: 72, // % colaboradores usando processo correto (telemedicina primeiro)
+  usoConscientePA: 81, // % colaboradores usando processo correto (telemedicina primeiro)
 };
 
 export const scoreData = {
-  valor: 72,
+  valor: 81,
   meta: 80,
   status: 'Bom',
 };

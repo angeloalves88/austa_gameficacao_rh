@@ -50,12 +50,6 @@ export function Dashboard() {
             <TrendingUp size={20} className="sm:w-6 sm:h-6 shrink-0" />
           </p>
         </div>
-        <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-6 shadow-sm sm:col-span-2 lg:col-span-1">
-          <p className="text-slate-600 text-xs sm:text-sm mb-1">Uso Consciente do PA</p>
-          <p className="text-xl sm:text-2xl font-bold text-amber-500 flex items-center gap-2">
-            {kpiData.usoConscientePA}%
-          </p>
-        </div>
       </div>
 
       <div className="mb-6 lg:mb-8">
